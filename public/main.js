@@ -1,470 +1,46 @@
-// Importing fetch functions
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+import { auth } from "./firebase.js";
+import './js/search.js';
+import './js/theme.js';
+import './js/dashboard.js';
+import './js/menu.js';
+import { updateDashboard } from './js/dashboard.js';
+import { setCurrentSongInfo } from './js/state.js';
 
-import { getFirestore, collection, getDocs, getDoc, doc, setDoc, deleteDoc, } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
-import { auth } from "./firebase.js";  // Import the auth object
-import fetchDataFromYouTube from './api_calls/youtube.js';
-import fetchDataFromSpotify from './api_calls/spotify.js';
-
-
-// import fetchDataFromYTMusic from './api_calls/youtube_music.js';
-
-// YouTube API Key
-const youtubeApiKey = "AIzaSyBTP7VWvdJrAXgf965iz3BsL7a19UmAMLM";
-
-// Debug log
-console.log("Debug: main.js loaded");
-
-// Register service worker
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js')
-        .then(reg => console.log('Debug: Service worker registered'))
-        .catch(err => console.log('Debug: Service worker error', err));
-}
-
-// Search button click handler
-document.getElementById("searchButton").addEventListener("click", async function () {
-
-    // Get input
-    const songInput = document.getElementById("songInput").value;
-
-    // Validate input
-    if (!songInput) {
-        alert("Please enter a song name or link.");
-        return;
-    }
-
-    // Fetch YouTube data
-    const youtubeData = await fetchDataFromYouTube(songInput, youtubeApiKey);
-
-    // Fetch Spotify data
-    const spotifyData = await fetchDataFromSpotify(songInput);
-
-    // Combine all data
-    const fetchedData = [...youtubeData, ...spotifyData];
-
-    // Display results
-    await displayResults(fetchedData);  // Make sure to await this if displayResults is async
-
-    // If the active theme is 'albumart', then update the theme colors
-    if (activeTheme === 'albumart' && spotifyData.length > 0) {
-        const albumArtUrl = spotifyData[0].albumArt;  // Assume the first Spotify result contains the albumArt
-        try {
-            const color = await getMostCommonColor(albumArtUrl);  // Replace with your actual function to get the most common color
-            console.log("Setting --album-art-color to:", color);  // Debugging log
-
-            // Set the CSS variable for the album art theme
-            document.documentElement.style.setProperty('--album-art-color', color);
-        } catch (error) {
-            console.error("Could not set album art color:", error);
-        }
-    }
-
-});
-
-// Listen for keyup events on the song input field
-document.getElementById("songInput").addEventListener("keyup", function (event) {
-    // Check if the Enter key was pressed
-    if (event.keyCode === 13) {
-        // Cancel the default action, if needed
-        event.preventDefault();
-        // Trigger the button click event
-        document.getElementById("searchButton").click();
-    }
-});
-
-
-// When the page loads, get the saved theme from Firestore
-document.addEventListener('DOMContentLoaded', () => {
-    getThemeFromFirestore();
-});
-
-// Asynchronous function to display results
-async function displayResults(fetchedData) {
-    // Initialize streamingLinks
-    const streamingLinks = fetchedData.map(item => {
-        return {
-            link: item.link,
-            serviceName: item.serviceName
-        };
-    });
-
-    // Get the Spotify data
-    const spotifyData = fetchedData.find(item => item.serviceName === 'Spotify');
-
-    // Create or get the results container
-    const resultsContainer = document.getElementById("results");
-
-    // If Spotify data is found
-    if (spotifyData) {
-        // Reset CSS variables to default (or some base color) before setting new ones
-        const defaultColor = 'rgb(255, 255, 255)'; // You can change this to your default color
-        // Check if the active theme is 'albumart'
-        if (activeTheme === 'albumart') {
-            try {
-                const baseColor = await getMostCommonColor(spotifyData.albumArt);
-                console.log("Setting album art colors");
-
-                // Extract the red, green, and blue components of the base color
-                const [r, g, b] = baseColor.match(/\d+/g).map(Number);
-
-                // Initialize lightness adjustment
-                let lightnessAdjustment;
-
-                // Check if the color is a variation of red
-                if (r > g && r > b) {
-                    lightnessAdjustment = 150; // Higher lightness for red variations
-                } else {
-                    lightnessAdjustment = 70; // Default lightness for other colors
-                }
-
-                // Generate shades
-                const darkerColor = adjustColor(baseColor, -30);
-                const lighterColor = adjustColor(baseColor, lightnessAdjustment);
-                const textColor = adjustColor(baseColor, -100);
-                const alternateColor = adjustColor(baseColor, 15);
-
-                // Set the CSS variables
-                document.documentElement.style.setProperty('--bg-color', lighterColor);  // Use lighterColor for background
-                document.documentElement.style.setProperty('--primary-color', baseColor);
-                document.documentElement.style.setProperty('--secondary-color', darkerColor);
-                document.documentElement.style.setProperty('--text-color', textColor);
-                document.documentElement.style.setProperty('--alt-bg-color', alternateColor);
-                document.documentElement.style.setProperty('--header-text-color', textColor);
-                document.documentElement.style.setProperty('--button-color', baseColor);
-                document.documentElement.style.setProperty('--button-hover-color', lighterColor);
-                document.documentElement.style.setProperty('--input-border-color', darkerColor);
-                document.documentElement.style.setProperty('--input-bg-color', alternateColor);
-                document.documentElement.style.setProperty('--results-button-color', baseColor);
-                document.documentElement.style.setProperty('--results-button-hover-color', lighterColor);
-
-            } catch (error) {
-                console.error("Could not set album art color:", error);
-            }
-        }
-
-        // Create an img element for album art
-        const img = document.createElement("img");
-        img.src = spotifyData.albumArt;
-        img.style.borderRadius = "50%";
-        img.width = 150;
-
-        // Create a Save to Dashboard link
-        const saveLink = document.createElement("a");
-        saveLink.href = "#";
-        saveLink.className = "save-to-dashboard";
-        saveLink.textContent = "Save To Dashboard";
-
-        // Attach a click event listener to Save to Dashboard link
-        saveLink.addEventListener('click', function () {
-            const songInfo = {
-                title: spotifyData.songName,
-                artist: spotifyData.artist,
-                album: spotifyData.album,
-                albumArt: spotifyData.albumArt
-            };
-            saveSongToDashboard(songInfo, streamingLinks);
-        });
-
-        // Set the inner HTML for Spotify data
-        resultsContainer.innerHTML = `
-            ${img.outerHTML}
-            <div>
-                <strong>${spotifyData.songName}</strong>
-                <br>
-                <strong>${spotifyData.artist}</strong>
-                <br>
-                <strong>${spotifyData.album}</strong>
-                <br>
-            </div>
-        `;
-
-        // Append the Save to Dashboard link to results
-        resultsContainer.appendChild(saveLink);
-    }
-
-    // Loop through the fetched data to create service buttons
-    fetchedData.forEach(item => {
-        // Create a button
-        const button = document.createElement("button");
-        button.className = "streaming-button";
-
-        // Create image element for the button
-        const buttonImg = document.createElement("img");
-        buttonImg.className = "streaming-button-image";
-
-        // Set image source based on the service name
-        if (item.serviceName === 'Spotify') {
-            buttonImg.src = 'images/streaming_images/Spotify/streaming_image.png';
-        } else if (item.serviceName === 'YouTube') {
-            buttonImg.src = 'images/streaming_images/Youtube/streaming_image.png';
-        }
-
-        // Set button onclick to open the service link
-        button.onclick = () => window.open(item.link);
-
-        // Append the image to the button
-        button.appendChild(buttonImg);
-
-        // Append the button to results container
-        resultsContainer.appendChild(button);
-    });
-
-    // Reference to the results container
-
-    if (spotifyData) {
-        const songInfo = {
-            title: spotifyData.songName,
-            artist: spotifyData.artist,
-            album: spotifyData.album,
-            albumArt: spotifyData.albumArt
-        };
-
-        // Assuming you have a default layout for new results
-        const defaultLayout = 'htmlLayout-default';
-
-        // Generate HTML content based on the layout
-        const htmlContent = await generateHtmlFromLayout(songInfo, streamingLinks, defaultLayout);
-
-        // Insert the HTML into the DOM
-        resultsContainer.innerHTML = htmlContent;
-    }
-}
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////// Menu Section /////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Get the menu icon element from the DOM
-const navMenuIcon = document.querySelector('.navbar .fas');
-
-// Add click handler for the menu icon
-navMenuIcon.addEventListener('click', function (event) {
-    event.stopPropagation();  // Prevent the event from bubbling up to the document
-    toggleMenu(); // Open or close the menu
-});
-
-// Menu state variable
-let menuOpen = false;
-
-// Function to open the menu
-function openMenu() {
-    menuOpen = true; // Update state variable
-    const menuEl = document.getElementById('menu'); // Get menu element
-    menuEl.classList.add('open'); // Add 'open' class to menu element
-}
-
-// Function to close the menu
-function closeMenu() {
-    menuOpen = false; // Update state variable
-    const menuEl = document.getElementById('menu'); // Get menu element
-    menuEl.classList.remove('open'); // Remove 'open' class from menu element
-}
-
-// Function to toggle the menu
-function toggleMenu() {
-    // Check if the menu is currently open
-    if (menuOpen) {
-        closeMenu(); // Close the menu
-    } else {
-        openMenu(); // Open the menu
-    }
-}
-
-// Event listener to close the menu when clicking outside of it
-document.addEventListener('click', function (event) {
-    const menuEl = document.getElementById('menu'); // Get menu element
-    // Check if clicked outside the menu and the menu icon, and if the menu is open
-    if (!menuEl.contains(event.target) && !navMenuIcon.contains(event.target) && menuOpen) {
-        closeMenu(); // Close the menu
-    }
-});
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////  Dashboard ///////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-// Function to update the Dashboard UI with saved songs
-const updateDashboard = async () => {
-    const dashboardContent = document.getElementById('dashboardContent');
-    const savedSongs = await getSavedSongsFromDashboard();
-    console.log('Fetched saved songs:', savedSongs);
-
-    let html = '';
-    savedSongs.forEach(song => {
-        html += `
-    <div class="saved-song" data-song-title="${song.title}">
-        <img src="${song.albumArt}" alt="Album Art" width="50">
-        <div class="text-info">
-            <span class="song-title">${song.title}</span>
-            <span class="song-artist">${song.artist}</span>
-        </div>
-        <div class="song-controls">
-            <button class="songMenu">
-                <i class="fa-solid fa-ellipsis-vertical"></i>
-            </button>
-            <!-- Added Dropdown Menu -->
-            <div class="songMenu-dropdown">
-                <ul>
-                    <li><a href="#" class="songMenu-view">View SoLoLink</a></li>
-                    <li><a href="#" class="songMenu-choose-layout">Choose Layout</a></li>
-                    <li><a href="#" class="songMenu-delete">Delete</a></li>
-                    <li><a href="#" class="songMenu-generate-link">Generate Link</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    `;
-    });
-
-    dashboardContent.innerHTML = html;
-};
-
-
-// Function to create a URL slug
-function createSlug(artist, title) {
-    return encodeURIComponent(artist.toLowerCase().replace(/\s+/g, '-').replace(/,/g, '-')) + '-' +
-        encodeURIComponent(title.toLowerCase().replace(/\s+/g, '-').replace(/,/g, '-'));
-}
-
-
-document.addEventListener('click', async function (event) {
-
-    
-    const closestSavedSong = event.target.closest('.saved-song');
-
-    // Log for debugging
-    console.log("Debug: Closest saved song element:", closestSavedSong);
-
-    if (!closestSavedSong) {
-        console.log("Debug: No closest saved song element found.");
-        return;  // Exit if no closestSavedSong element is found
-    }
-
-    const songTitleElement = closestSavedSong.querySelector('.song-title');
-
-    // Log for debugging
-    console.log("Debug: Song title element:", songTitleElement);
-
-    if (!songTitleElement) {
-        console.log("Debug: No song title element found.");
-        return;  // Exit if no songTitleElement is found
-    }
-
-    const songTitle = songTitleElement.innerText;
-
-    // Log for debugging
-    console.log("Debug: Song title:", songTitle);
-
-    let songInfo = null;
-
-    try {
-        // Try to fetch songInfo
-        songInfo = await getSongInfoFromFirestore(songTitle);
-
-        // Debug: Log the value of songInfo here to check if it's populated
-        console.log("Debug: Fetched songInfo inside try block:", songInfo);
-
-    } catch (error) {
-        // Log error for debugging
-        console.error("Debug: Error fetching songInfo:", error);
-        return;  // Exit if an error occurred
-    }
-
-    // Debug: Log the value of songInfo again here to ensure it's still populated
-    console.log("Debug: Fetched songInfo after try-catch:", songInfo);
-
-    if (event.target.matches('.songMenu-generate-link')) {
-        if (!songInfo) {
-            console.error("Could not fetch songInfo for song title:", songTitle);
-            return;
-        }
-
-        // Create slug and fullUrl based on fetched songInfo
-        const slug = createSlug(songInfo.artist, songInfo.title);
-        const fullUrl = `https://sololink-accf3.web.app/${slug}/`;
-
-        // Open the fullUrl in a new window or tab
-        window.open(fullUrl, '_blank');
-    }
-});
-
-
-
-
-
-// Main event listener for when the document is fully loaded
 document.addEventListener('DOMContentLoaded', function () {
-
-    // Get the menu and the mainPageLink and dashboardLink elements
     const menu = document.getElementById('menu');
     const mainPageLink = document.getElementById('mainPageLink');
     const dashboardLink = document.getElementById('dashboardLink');
-    const menuButton = document.getElementById('menuIcon');  // Button to open the menu
+    const menuButton = document.getElementById('menuIcon');
 
-    // Function to close the menu
     const closeMenu = () => {
-        menu.classList.remove('open');  // Remove the 'open' class
+        menu.classList.remove('open');
     };
 
-    // Function to open the menu
     const openMenu = () => {
-        menu.classList.add('open');  // Add the 'open' class
+        menu.classList.add('open');
     };
 
-    // Add event listeners to close the menu when mainPageLink or dashboardLink is clicked
     mainPageLink.addEventListener('click', closeMenu);
     dashboardLink.addEventListener('click', closeMenu);
-
-    // Add event listener to open the menu when menuIcon is clicked
     menuButton.addEventListener('click', openMenu);
 });
 
-
-// Function to toggle dashboard and main content visibility
 document.addEventListener('DOMContentLoaded', (event) => {
     const dashboardLink = document.getElementById('dashboardLink');
     const mainPageLink = document.getElementById('mainPageLink');
     const dashboardContent = document.getElementById('dashboardContent');
-    const mainContent = document.querySelector('.container');  // Assume the main content is within a container with the class "container"
-
-
-    // Existing DOMContentLoaded Event
-    document.addEventListener('DOMContentLoaded', (event) => {
-        // Existing code
-
-        mainPageLink.addEventListener('click', function () {
-            // Clear previous results
-            location.reload();
-
-            // Existing code for toggling display
-            dashboardContent.style.display = "none";
-            mainContent.style.display = "block";
-        });
-
-        // Existing code
-    });
-
+    const mainContent = document.querySelector('.container');
 
     if (dashboardLink && mainPageLink && mainContent && dashboardContent) {
         dashboardLink.addEventListener('click', function () {
             mainContent.style.display = "none";
             dashboardContent.style.display = "block";
-            updateDashboard();  // Update the dashboard
+            updateDashboard();
         });
 
         mainPageLink.addEventListener('click', function () {
-            // Clear previous results
             location.reload();
-
-            // Hide dashboard and show main content
             dashboardContent.style.display = "none";
             mainContent.style.display = "block";
         });
@@ -473,65 +49,39 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 });
 
-
-// Show Song Menu Dropdown
-
-
-// Function to toggle the visibility of the dropdown menu
-document.addEventListener('click', function (event) {
-    if (event.target.closest('.songMenu')) {
-        const dropdown = event.target.closest('.saved-song').querySelector('.songMenu-dropdown');
-        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-    }
-});
-
-// Add event listener to close the dropdown when clicking outside of it
-document.addEventListener('click', function (event) {
-    const dropdowns = document.querySelectorAll('.songMenu-dropdown');
-    dropdowns.forEach(dropdown => {
-        if (!dropdown.contains(event.target) && !event.target.matches('.songMenu') && dropdown.style.display === 'block') {
-            dropdown.style.display = 'none';
-        }
-    });
-});
-
-
-// Add event listeners to all View SoLoLink options in dropdowns
 document.addEventListener('click', async function (event) {
-    if (event.target.matches('.songMenu-view')) {
-        const songTitle = event.target.closest('.saved-song').querySelector('.song-title').innerText;
-        const songHtml = await getHtmlFromFirestore(songTitle);  // Your existing function to fetch HTML from Firestore
-        const newWindow = window.open("", "_blank");
-        newWindow.document.write(songHtml);
+    const closestSavedSong = event.target.closest('.saved-song');
 
-        const albumArtUrl = "https://i.scdn.co/image/ab67616d0000b273e4a14f0aa6179e95809a691c";  // Replace this with the actual URL from your code
-        try {
-            const color = await getMostCommonColor(albumArtUrl);
-            console.log("Setting --html-album-art-color to:", color); // Debugging log
+    if (!closestSavedSong) {
+        return;
+    }
 
-            // Execute a script in the new window that sets the CSS variable
-            const script = `
-                document.documentElement.style.setProperty('--html-album-art-color', '${color}');
-            `;
-            newWindow.document.write('<script>' + script + '</script>');
-        } catch (error) {
-            console.error("Could not set button color:", error);
+    const songTitleElement = closestSavedSong.querySelector('.song-title');
+
+    if (!songTitleElement) {
+        return;
+    }
+
+    const songTitle = songTitleElement.innerText;
+    let songInfo = null;
+
+    try {
+        songInfo = await getSongInfoFromFirestore(songTitle);
+    } catch (error) {
+        console.error("Error fetching songInfo:", error);
+        return;
+    }
+
+    if (event.target.matches('.songMenu-generate-link')) {
+        if (!songInfo) {
+            console.error("Could not fetch songInfo for song title:", songTitle);
+            return;
         }
+        const slug = createSlug(songInfo.artist, songInfo.title);
+        const fullUrl = `https://sololink-accf3.web.app/${slug}/`;
+        window.open(fullUrl, '_blank');
     }
 });
-
-
-// Choose Layout Button
-
-// Global variables to store the current songInfo and streamingLinks
-let currentSongInfo = null;
-let currentStreamingLinks = null;
-
-// Function to set the current song info and streaming links
-function setCurrentSongInfo(songInfo, streamingLinks) {
-    currentSongInfo = songInfo;
-    currentStreamingLinks = streamingLinks;
-}
 
 // This function fetches song information from Firestore based on the song title.
 async function getSongInfoFromFirestore(songTitle) {
@@ -722,9 +272,9 @@ async function deleteSong(event) {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////// Saving Song //////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Initialize Firestore Database
 const db = getFirestore();
@@ -787,9 +337,9 @@ async function saveSongToDashboard(songInfo, streamingLinks, selectedLayout = 'h
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Show SoLoLink HTML
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // New function to generate HTML based on the layout
 async function generateHtmlFromLayout(songInfo, streamingLinks, selectedLayout = 'htmlLayout-default') {
@@ -871,9 +421,9 @@ const getSavedSongsFromDashboard = async () => {
 
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////// Album Art Color Grabber ///////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Function to get the most common color from an image URL
 async function getMostCommonColor(imgUrl) {
@@ -941,9 +491,9 @@ async function setButtonColor(albumArtUrl) {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////// Theme Code ///////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 ///////////// Album Art Theme Generator ///////////////
