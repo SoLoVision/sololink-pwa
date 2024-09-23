@@ -1,0 +1,80 @@
+/* ========== Layout Options Popup ========== */
+
+#layoutOptionsPopup.popup.layout-popup {
+    display: none;
+    /* Initially hidden */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    overflow-x: auto;
+    overflow-y: auto;
+    z-index: 1000;
+    /* Make sure it's on top of other elements */
+}
+
+#layoutOptionsPopup .layout-item {
+    display: inline-block;
+    width: 400px;
+    height: 400px;
+    margin: 10px;
+    text-align: center;
+    border-radius: 20px;
+}
+
+#layoutOptionsPopup .layout-item .layout-option img {
+    width: 300px;
+    /* Fixed width */
+    height: auto;
+    /* Maintain aspect ratio */
+    border-radius: 20px;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    /* Or adjust as needed */
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+    #layoutOptionsPopup.popup.layout-popup {
+        display: flex;
+        /* Enable Flexbox */
+        flex-wrap: wrap;
+        /* Enable wrapping */
+        justify-content: space-evenly;
+        /* Evenly space items horizontally */
+        align-items: center;
+        /* Center items vertically */
+        margin-top: 7%;
+    }
+
+    #layoutOptionsPopup .layout-item {
+        flex-basis: calc(50% - 20px);
+        /* Set basis to 50% of the container width, minus 20px for margins */
+        margin: 10px;
+        /* Add 10px margin to each side */
+    }
+
+    #layoutOptionsPopup .layout-item .layout-option img {
+        width: 100%;
+        /* Full width */
+        height: auto;
+        /* Maintain aspect ratio */
+        border-radius: 20px;
+        /* Keep the rounded corners */
+        margin-top: 7%;
+    }
+
+    .close-button {
+        font-size: 24px;
+        /* Keep the size same */
+    }
+}

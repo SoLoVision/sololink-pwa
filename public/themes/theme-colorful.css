@@ -1,0 +1,19 @@
+:root {
+    /* Base colors */
+    --bg-color: #FFFFFF;
+    --primary-color: #E91E63;
+    --secondary-color: #FF5722;
+    --text-color: #212121;
+    --alt-bg-color: #3a3a3a;
+
+    /* Element colors */
+    --header-text-color: #8BC34A;
+    --button-color: #2196F3;
+    --button-hover-color: #FFC107;
+    --input-border-color: #9C27B0;
+    --input-bg-color: #CDDC39;
+
+    /* Results colors */
+    --results-button-color: #03A9F4;
+    --results-button-hover-color: #4CAF50;
+}

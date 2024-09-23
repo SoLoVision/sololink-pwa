@@ -1,0 +1,21 @@
+/* Forest Theme */
+
+:root {
+    /* Base colors */
+    --bg-color: #cbddc1;
+    --primary-color: #3a7d44;
+    --secondary-color: #2f6237;
+    --text-color: #f2f2f2;
+    --alt-bg-color: #3a3a3a;
+
+    /* Element colors */
+    --header-text-color: var(--primary-color);
+    --button-color: var(--primary-color);
+    --button-hover-color: var(--secondary-color);
+    --input-border-color: #6b9f76;
+    --input-bg-color: #d0e3c4;
+
+    /* Results colors */
+    --results-button-color: var(--primary-color);
+    --results-button-hover-color: var(--secondary-color);
+}

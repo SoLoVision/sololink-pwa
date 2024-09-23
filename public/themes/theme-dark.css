@@ -1,0 +1,19 @@
+:root {
+    /* Base colors */
+    --bg-color: #1a1a1a;
+    --primary-color: #BB86FC;
+    --secondary-color: #3700B3;
+    --text-color: #FFFFFF;
+    --alt-bg-color: #3a3a3a;
+
+    /* Element colors */
+    --header-text-color: var(--primary-color);
+    --button-color: var(--primary-color);
+    --button-hover-color: var(--secondary-color);
+    --input-border-color: #575757;
+    --input-bg-color: #1F1F1F;
+
+    /* Results colors */
+    --results-button-color: var(--primary-color);
+    --results-button-hover-color: var(--secondary-color);
+}

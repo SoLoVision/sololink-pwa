@@ -1,0 +1,61 @@
+/*============== Navbar ==============*/
+
+.navbar {
+    background-color: transparent;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+    z-index: 100;
+    justify-content: space-between;
+}
+
+.navbar .fas {
+    color: var(--secondary-color);
+    font-size: 1.5rem;
+}
+
+#loginBtn {
+    font-size: 16px;
+    /* you can adjust this */
+    padding: 8px 12px;
+    /* Adjust padding to control the size */
+    width: auto;
+    /* Auto width based on content and padding */
+    margin-left: auto;
+    /* Keep it if you want to push the button to the far right */
+    border-color: var(--secondary-color);
+    background-color: var(--button-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0.5rem;
+    }
+
+    #loginBtn {
+        font-size: 14px;
+        padding: 6px 10px;
+        margin-top: -1.2rem;
+        /* Negative margin to move the button closer to the top */
+    }
+}
+/* Media Query for Tablet Devices */
+@media (min-width: 481px) and (max-width: 768px) {
+    .navbar {
+        padding: 0.8rem;
+    }
+
+    #loginBtn {
+        font-size: 15px;
+        padding: 7px 11px;
+    }
+}

@@ -1,0 +1,197 @@
+/* ========== CSS Variables ========== */
+:root {
+    --html-body-bg-color: #F0F1F6;
+    --html-text-color: #333;
+    --html-heading-color: #444;
+    --html-subtext-color: #777;
+    --html-button-bg-color: #4c6faf;
+    --html-button-text-color: #FFF;
+    --html-button-hover-bg-color: #1d4d83;
+    --html-link-color: #007BFF;
+    --html-link-hover-color: #0056b3;
+    --html-container-bg-color: #FFF;
+}
+
+/* ========== Basic Reset ========== */
+body,
+h1,
+h2,
+h3,
+p,
+ul,
+li,
+button,
+a {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: Arial, sans-serif;
+}
+
+/* ========== Body ========== */
+body {
+    color: var(--html-text-color);
+    font-size: 16px;
+    line-height: 1.5;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ========== Headings ========== */
+h1,
+h2,
+h3 {
+    margin-bottom: 1rem;
+    font-weight: bold;
+    color: var(--html-heading-color);
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.2rem;
+}
+
+/* ========== Paragraphs ========== */
+p {
+    margin-bottom: 1rem;
+}
+
+/* ========== Lists ========== */
+ul {
+    list-style-type: none;
+    margin-bottom: 1rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+/* ========== HTML Container ========== */
+.html-container {
+    width: 80%;
+    max-width: 250px;
+    margin: 10% auto;
+    padding: 2rem;
+    background-color: var(--html-container-bg-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* ========== HTML Artist Info ========== */
+.html-saved-song {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5%;
+    margin: 8px 0;
+}
+
+.html-album-art {
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    margin-bottom: 16px;
+    flex-direction: column;
+}
+
+.html-text-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.html-song-title {
+    font-size: 2.2rem;
+    align-content: center;
+    color: var(--html-heading-color);
+    margin-bottom: 0px;
+    text-align: center;
+}
+
+.html-song-artist {
+    font-size: 1.2rem;
+    color: var(--html-subtext-color);
+    margin-top: 0px;
+    text-align: center;
+}
+
+/* ========== HTML Buttons ========== */
+button,
+.html-streaming-links button {
+    background-color: #2d2e3b;
+    color: var(--html-button-text-color);
+    padding: 0;
+    margin-top: 15px;
+    cursor: pointer;
+    border-radius: 50px;
+    font-size: 18px;
+    width: 200px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button:hover,
+.html-streaming-links button:hover {
+    background-color: var(--html-button-hover-bg-color);
+}
+
+.html-streaming-links {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+button img,
+.html-streaming-links button img {
+    width: 50%;
+    height: auto;
+    margin-right: 10px;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+    .html-container {
+        width: 95%;
+        margin: 5% auto;
+        padding: 1.5rem;
+    }
+
+    .html-album-art {
+        width: 90%;
+    }
+
+    .html-song-title {
+        font-size: 2rem;
+    }
+}
+
+/* Media Query for Tablet Devices */
+@media (min-width: 481px) and (max-width: 768px) {
+    .html-container {
+        width: 85%;
+        margin: 8% auto;
+        padding: 1.8rem;
+    }
+
+    .html-album-art {
+        width: 85%;
+    }
+
+    .html-song-title {
+        font-size: 2.1rem;
+    }
+}

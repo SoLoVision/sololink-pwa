@@ -1,0 +1,21 @@
+/* Neon Theme */
+
+:root {
+    /* Base colors */
+    --bg-color: #000000;
+    --primary-color: #39FF14;
+    --secondary-color: #FF00FF;
+    --text-color: #FFFFFF;
+    --alt-bg-color: #3a3a3a;
+
+    /* Element colors */
+    --header-text-color: #FF4500;
+    --button-color: #1E90FF;
+    --button-hover-color: #00FFFF;
+    --input-border-color: #9400D3;
+    --input-bg-color: #4169E1;
+
+    /* Results colors */
+    --results-button-color: #FF1493;
+    --results-button-hover-color: #7FFF00;
+}

@@ -1,0 +1,21 @@
+/* Default Theme */
+
+:root {
+    /* Base colors */
+    --bg-color: #F0F8FF;
+    --primary-color: #1E90FF;
+    --secondary-color: #20B2AA;
+    --text-color: #5F9EA0;
+    --alt-bg-color: #3a3a3a;
+
+    /* Element colors */
+    --header-text-color: var(--primary-color);
+    --button-color: #4682B4;
+    --button-hover-color: #B0E0E6;
+    --input-border-color: #00CED1;
+    --input-bg-color: #AFEEEE;
+
+    /* Results colors */
+    --results-button-color: #00BFFF;
+    --results-button-hover-color: #40E0D0;
+}

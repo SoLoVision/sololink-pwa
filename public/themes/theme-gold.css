@@ -1,0 +1,21 @@
+/* Gold Theme */
+
+:root {
+    /* Base colors */
+    --bg-color: #FFF5E1;
+    --primary-color: #FFD700;
+    --secondary-color: #DAA520;
+    --text-color: #8B6914;
+    --alt-bg-color: #3a3a3a;
+
+    /* Element colors */
+    --header-text-color: var(--primary-color);
+    --button-color: #CDAD00;
+    --button-hover-color: #FFEC8B;
+    --input-border-color: #B8860B;
+    --input-bg-color: #FFEBCD;
+
+    /* Results colors */
+    --results-button-color: #FFD700;
+    --results-button-hover-color: #DAA520;
+}

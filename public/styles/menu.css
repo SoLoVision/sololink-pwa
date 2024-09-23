@@ -1,0 +1,146 @@
+/*============== Menu ==============*/
+
+#menu {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    transform: translateX(-100%);
+}
+
+#menu.open {
+    width: 250px;
+    transform: translateX(0);
+    transition: transform 0.5s;
+}
+
+#menu a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+#menuSection {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+#menu.static-content {
+    overflow: hidden !important;
+}
+
+/*============== Profile Container ==============*/
+
+#profileInfo {
+    background-color: #444343;
+    width: 100%;
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+#profilePicture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+#userName,
+#userEmail {
+    color: #ffffff;
+    margin-top: 5%;
+    margin-bottom: 1%;
+    overflow: hidden;
+}
+
+#logoutBtn {
+    background-color: var(--button-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    margin-top: 16px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    text-align: center;
+}
+
+#logoutBtn:hover {
+    background-color: var(--button-hover-color);
+}
+
+/*===== Theme Dropdown =====*/
+
+.menuSection h3 {
+    color: #fff;
+    padding-left: 1rem;
+    margin-top: 4rem;
+}
+
+#themeSelect {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    font-size: 1.2rem;
+    padding-left: 1rem;
+    border: none;
+    background: #f2f2f2;
+    width: 60%;
+    margin-left: 1rem;
+    margin-top: .7rem;
+    height: 2rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#themeSelect option {
+    font-size: 1rem;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+    #menu.open {
+        width: 200px;
+    }
+
+    #menu a {
+        font-size: 20px;
+    }
+
+    #logoutBtn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+}
+
+/* Media Query for Tablet Devices */
+@media (min-width: 481px) and (max-width: 768px) {
+    #menu.open {
+        width: 225px;
+    }
+
+    #menu a {
+        font-size: 22px;
+    }
+
+    #logoutBtn {
+        padding: 9px 18px;
+        font-size: 15px;
+    }
+}

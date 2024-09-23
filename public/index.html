@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>SoLoLink</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+
+    <!-- Firebase SDK -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js"></script>
+
+
+    <!-- Your Firebase Initialization and Authentication Script -->
+    <script type="module" src="firebase.js"></script>
+
+    <!-- Font Awesome -->
+    <script src="images/fontawesome-free-6.4.0-web/js/fontawesome.js"></script>
+    <link rel="stylesheet" href="images/fontawesome-free-6.4.0-web/css/all.css">
+
+    <!-- Your CSS -->
+    <link rel="stylesheet" type="text/css" href="styles/layoutOptions.css">
+    <link rel="stylesheet" type="text/css" href="styles/results.css">
+    <link rel="stylesheet" type="text/css" href="styles/login.css">
+    <link rel="stylesheet" type="text/css" href="styles/navbar.css">
+    <link rel="stylesheet" type="text/css" href="styles/menu.css">
+    <link rel="stylesheet" type="text/css" href="styles/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
+
+
+    <!-- Color Themes -->
+    <link id="theme" rel="stylesheet" href="themes/theme-default.css" />
+
+    <!-- Your main JavaScript -->
+    <script type="module" src="login.js"></script>
+    <script type="module" src="main.js"></script>
+</head>
+
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+        <i id="menuIcon" class="fas fa-bars"></i>
+        <!-- Login/Signup Button -->
+        <button id="loginBtn" class="loginBtn">Login/Signup</button>
+    </nav>
+
+    <!-- Login/Signup -->
+
+    <!-- Login Popup -->
+    <div id="loginPopup" class="popup hidden">
+        <h2>Login</h2>
+        <form id="loginForm" class="auth-form">
+            <div class="input-group">
+                <span class="input-icon"><i class="fas fa-user"></i></span>
+                <input type="email" id="loginEmail" placeholder="Email" autocomplete="username">
+            </div>
+            <div class="input-group">
+                <span class="input-icon"><i class="fas fa-lock"></i></span>
+                <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+            </div>
+            <button type="submit" class="auth-button">Login</button>
+        </form>
+        <button id="googleSignIn" class="google-button">
+            <img src="images/googleSignin.png" alt="Sign in with Google">
+        </button>
+        <button id="switchToSignup" class="switch-button">Switch to Signup</button>
+    </div>
+
+    <!-- Signup Popup -->
+    <div id="signupPopup" class="popup hidden">
+        <h2>Signup</h2>
+        <form id="signupForm" class="auth-form">
+            <div class="input-group">
+                <span class="input-icon"><i class="fas fa-user"></i></span>
+                <input type="email" id="signupEmail" placeholder="Email" autocomplete="username">
+            </div>
+            <div class="input-group">
+                <span class="input-icon"><i class="fas fa-lock"></i></span>
+                <input type="password" id="signupPassword" placeholder="Password" autocomplete="current-password">
+            </div>
+            <button type="submit" class="auth-button">Signup</button>
+        </form>
+        <button id="googleSignUp" class="google-button">
+            <img src="images/googleSignup.png" alt="Sign up with Google">
+        </button>
+        <button id="switchToLogin" class="switch-button">Switch to Login</button>
+    </div>
+
+
+
+
+    <!-- Main Container -->
+
+    <div class="container">
+        <h1>SoLoLink</h1>
+        <input type="text" id="songInput" placeholder="Search for a song">
+        <button id="searchButton">Search</button>
+        <div id="results"></div>        
+    </div>
+
+
+
+    <!-- Dashboard Container -->
+    <div id="dashboardContent" class="container" style="display: none;">
+        <div id="savedSongsList">
+            <h3>Your Saved Songs</h3>
+            <ul id="listOfSavedSongs">
+                <!-- Example of saved song structure -->
+                <li>
+                    <div class="saved-song">
+                        <img src="https://i.scdn.co/image/ab67616d0000b273714186b691c611cf166ac413" alt="Album Art" width="50">
+                        <div class="text-info">
+                            <span class="song-title">I Don't Need You (Remix)</span>
+                            <span class="song-artist">Ali Tatum II, Brian Durst</span>
+                        </div>
+                        <!-- Added song controls -->
+                        <div class="song-controls">
+                            <button class="songMenu">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <!-- Dropdown menu -->
+                            <div class="songMenu-dropdown">
+                                <a href="#" class="songMenu-delete">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <!-- Further dynamically generated saved songs should be similar to the above example -->
+            </ul>
+        </div>
+    </div>
+
+
+<!-- Layout Options Popup -->
+<div id="layoutOptionsPopup" class="popup layout-popup hidden">
+    <i id="closeLayoutOptions" class="fa-solid fa-xmark close-button"></i>
+    <div class="layout-item">
+        <div class="layout-option" data-layout="htmlLayout-default">
+            <img src="/images/Layout_Thumbnails/htmlLayout-default.png" alt="Default Layout">
+            <p>Default Layout</p>
+        </div>
+    </div>
+    <div class="layout-item">
+        <div class="layout-option" data-layout="htmlLayout-default_AlbumArt">
+            <img src="images/Layout_Thumbnails/htmlLayout-defaultAlbumArt.png" alt="Default Album Art">
+            <p>Default Album Art</p>
+        </div>
+    </div>
+    <div class="layout-item">
+        <div class="layout-option" data-layout="htmlLayout-box">
+            <img src="images/Layout_Thumbnails/htmlLayout-box.png" alt="Box Layout">
+            <p>Box Layout</p>
+        </div>
+    </div>
+    <div class="layout-item">
+        <div class="layout-option" data-layout="htmlLayout-box_AlbumArt">
+            <img src="images/Layout_Thumbnails/htmlLayout-box_AlbumArt.png" alt="Box Layout Album Art">
+            <p>Box Layout</p>
+        </div>
+    </div>
+</div>
+
+    <!-- Menu -->
+
+    <div id="menu">
+        <div id="menuContent">
+            <!-- Profile Information Container -->
+            <div id="profileInfo">
+                <img id="profilePicture" src="" alt="Profile Picture" style="display:none;">
+                <p id="userName" style="display:none;"></p>
+                <p id="userEmail" style="display:none;"></p>
+                <button id="logoutBtn" style="display:none;">Logout</button>
+            </div>
+            <!-- New Dashboard and Main Page Links -->
+            <div class="menuSection">
+                <h3>Navigation</h3>
+                <a href="#" id="mainPageLink">Create a SoLoLink</a>
+                <a href="#" id="dashboardLink">Dashboard</a>
+                    
+            </div>
+            <div class="menuSection">
+                <h3>Themes</h3>
+                <select id="themeSelect">
+                    <option value="default">Default</option>
+                    <option value="albumart">Album Art</option>
+                    <option value="dark">Dark</option>
+                    <option value="light">Light</option>
+                    <option value="neon">Neon</option>
+                    <option value="ocean">Ocean</option>
+                    <option value="forest">Forest</option>
+                    <option value="retro">Retro</option>
+                    <option value="gold">Gold</option>
+                    <option value="colorful">Colorful</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

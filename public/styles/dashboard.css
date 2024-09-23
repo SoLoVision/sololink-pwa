@@ -1,0 +1,168 @@
+/* Dashboard Container Styling */
+#dashboardContent {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Saved Songs List Styling */
+#savedSongsList {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#savedSongsList li {
+    background-color: #fff;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Text Info Container */
+.text-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Song Title Styling */
+.song-title {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+/* Artist Name Styling */
+.song-artist {
+    display: block;
+    font-size: 14px;
+}
+
+/* Header for Song Links */
+h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Each Saved Song Styling */
+.saved-song {
+    display: flex;
+    align-items: flex-start;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+/* Album Art Styling */
+.saved-song img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Line separating each song */
+.saved-song {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Song Controls Menu */
+.song-controls {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Styling for the songMenu button */
+.songMenu {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 10px;
+    z-index: 100;
+}
+
+/* Styling for the dropdown menu */
+.songMenu-dropdown {
+    display: none;
+    position: absolute;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    z-index: 99;
+    width: 150px;
+    height: auto;
+}
+
+/* Styling for the list in the dropdown */
+.songMenu-dropdown ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Styling for the list items in the dropdown */
+.songMenu-dropdown li {
+    padding: 12px 20px;
+}
+
+/* Styling for the "Delete" text in the dropdown */
+.songMenu-delete {
+    font-weight: bold;
+    text-decoration: none;
+    font-family: 'Arial', sans-serif;
+    color: black;
+}
+
+/* Styling for the "Delete" text when hovered over */
+.songMenu-delete:hover {
+    color: red;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+    #dashboardContent {
+        padding: 15px;
+    }
+
+    .song-title {
+        font-size: 16px;
+    }
+
+    .song-artist {
+        font-size: 12px;
+    }
+}
+
+/* Media Query for Tablet Devices */
+@media (min-width: 481px) and (max-width: 768px) {
+    #dashboardContent {
+        padding: 18px;
+    }
+
+    .song-title {
+        font-size: 17px;
+    }
+
+    .song-artist {
+        font-size: 13px;
+    }
+}

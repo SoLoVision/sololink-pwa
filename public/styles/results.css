@@ -1,0 +1,111 @@
+/*============== Results ==============*/
+
+#albumArt {
+    border: var(--secondary-color);
+    border-radius: 15px;
+}
+
+#results {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#results button {
+    background-color: var(--album-art-color);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 12px;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 10px;
+    width: 100%;
+    height: 50px;
+}
+
+#results button:hover {
+    background-color: var(--results-button-hover-color);
+}
+
+/* Consistent button size */
+#results button,
+#searchButton {
+    width: 100%;
+    padding: 12px;
+}
+
+/* Spotify data styling */
+#results div {
+    text-align: center;
+}
+
+#results div strong:first-child {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#results div strong:nth-child(2) {
+    font-size: 16px;
+}
+
+#results div strong:nth-child(3) {
+    font-size: 14px;
+}
+
+/* Existing CSS file */
+
+/* Container for each streaming button */
+.streaming-button-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* Image inside the streaming button */
+.streaming-button-image {
+    width: 30%;
+    height: auto;
+    float: left;
+    margin-right: 12px;
+}
+
+/* Actual button inside the streaming button */
+.streaming-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--album-art-color);
+    color: var(--html-button-text-color);
+    padding: 14px 28px;
+    cursor: pointer;
+    border-radius: 50px;
+    font-size: 18px;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+    #results button {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+    .streaming-button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
+
+/* Media Query for Tablet Devices */
+@media (min-width: 481px) and (max-width: 768px) {
+    #results button {
+        padding: 12px 24px;
+        font-size: 17px;
+    }
+
+    .streaming-button {
+        padding: 12px 24px;
+        font-size: 16px;
+    }
+}

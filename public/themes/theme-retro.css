@@ -1,0 +1,22 @@
+/* Retro Theme */
+
+
+:root {
+    /* Base colors */
+    --bg-color: #F5DEB3;
+    --primary-color: #D2B48C;
+    --secondary-color: #808000;
+    --text-color: #696969;
+    --alt-bg-color: #3a3a3a;
+
+    /* Element colors */
+    --header-text-color: #CD853F;
+    --button-color: #FFDEAD;
+    --button-hover-color: #BC8F8F;
+    --input-border-color: #A0522D;
+    --input-bg-color: #DEB887;
+
+    /* Results colors */
+    --results-button-color: #DAA520;
+    --results-button-hover-color: #BDB76B;
+}

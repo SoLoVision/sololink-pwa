@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>${songInfo.title}</title>
+    <link rel="stylesheet" type="text/css" href="/layouts/${selectedLayout}.css">
+    <link rel="stylesheet" type="text/css" href="/styles/results.css">
+
+    
+
+    <script>
+        // Function to set the favicon
+        function setFavicon(favImgURL) {
+            let canvas = document.createElement('canvas');
+            canvas.width = 64;
+            canvas.height = 64;
+            let ctx = canvas.getContext('2d');
+
+            let img = new Image();
+            img.src = favImgURL;
+            img.onload = function () {
+                // Draw a circle
+                ctx.beginPath();
+                ctx.arc(32, 32, 32, 0, Math.PI * 2);
+                ctx.clip();
+
+                // Draw the image into the circle
+                ctx.drawImage(img, 0, 0, 64, 64);
+
+                // Create favicon link element
+                let link = document.createElement('link');
+                link.type = 'image/x-icon';
+                link.rel = 'shortcut icon';
+                link.href = canvas.toDataURL('image/x-icon');
+
+                // Append to the head
+                document.getElementsByTagName('head')[0].appendChild(link);
+            };
+        }
+
+        // Set the favicon when the document is ready
+        document.addEventListener("DOMContentLoaded", function () {
+            setFavicon("{songInfo.albumArt}");
+        });
+    </script>
+</head>
+
+<body>
+    <div class="html-container">
+        <div class="html-saved-song" id="html-results">
+            <img src="{albumArt}" alt="Album Art" class="html-album-art" width="50">
+            <div class="html-text-info">
+                <span class="html-song-title">{title}</span>
+                <span class="html-song-artist">{artist}</span>
+            </div>
+            <div class="html-streaming-links">
+                {streamingLinksHtml}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

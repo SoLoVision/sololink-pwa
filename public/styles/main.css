@@ -1,0 +1,113 @@
+:root {
+    /* Base colors */
+    --bg-color: #f2f2f2;
+    --primary-color: #1db954;
+    --secondary-color: #159f4d;
+    --text-color: #333;
+    --alt-bg-color: #3a3a3a;
+
+    /* Element colors */
+    --header-text-color: var(--primary-color);
+    --button-color: var(--primary-color);
+    --button-hover-color: var(--secondary-color);
+    --input-border-color: #ddd;
+    --input-bg-color: #fff;
+
+    /* Results colors */
+    --results-button-color: var(--primary-color);
+    --results-button-hover-color: var(--secondary-color);
+}
+
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--bg-color);
+}
+
+/*============== Main Container ==============*/
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 36px;
+    color: var(--header-text-color);
+    margin-bottom: 40px;
+}
+
+/* Style for input */
+#songInput {
+    width: 100%;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* Style for button */
+#searchButton {
+    background-color: var(--button-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10%;
+}
+
+/* Media Query for Mobile Devices */
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    #songInput {
+        padding: 10px 16px;
+        margin-bottom: 10px;
+    }
+
+    #searchButton {
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+}
+
+/* Media Query for Tablet Devices */
+@media (min-width: 481px) and (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 32px;
+        margin-bottom: 30px;
+    }
+
+    #songInput {
+        padding: 11px 18px;
+        margin-bottom: 15px;
+    }
+
+    #searchButton {
+        padding: 11px;
+        margin-bottom: 25px;
+    }
+}
